@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Details | Joe & Pau</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Montserrat:wght@200;400&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #d4af37; --bg-gradient: radial-gradient(circle at center, #0a0a14 0%, #000 100%); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            margin: 0; background: var(--bg-gradient);
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; padding: 10px 0; font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .stars { position: fixed; width: 100%; height: 100%; pointer-events: none; z-index: 1; top:0; left:0; }
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0; animation: twinkle infinite linear; }
+        @keyframes twinkle { 0% { transform: scale(0); opacity: 0; } 50% { opacity: 1; } 100% { transform: scale(1); opacity: 0; } }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px);
+            width: 98%; max-width: 1400px; padding: 60px 15px; text-align: center;
+            position: relative; z-index: 10; border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5); animation: fadeIn 2s ease;
+            margin-bottom: 20px;
+        }
+
+        .gallery-section { width: 100vw; overflow: hidden; margin: 40px 0; position: relative; z-index: 10; }
+        .gallery-header { font-family: 'Great Vibes', cursive; font-size: 45px; color: var(--gold); margin-bottom: 30px; text-align: center; }
+        .photo-runner { display: flex; width: fit-content; animation: runGallery 25s linear infinite; }
+        .photo-runner img {
+            width: 380px; height: 500px; object-fit: cover;
+            border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 5px;
+            margin: 0 5px; box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
+        @keyframes runGallery { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-390px * 3)); } }
+
+        .gold-framed-section {
+            position: relative; width: 95%; max-width: 1200px; margin: 0 auto 60px auto;
+            padding: 60px 15px; border: 2px solid var(--gold);
+        }
+        .gold-framed-section::after {
+            content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border: 1px solid var(--gold); pointer-events: none;
+        }
+
+        .names { font-family: 'Great Vibes', cursive; font-size: clamp(50px, 12vw, 90px); color: var(--gold); margin: 10px 0; }
+        .role-title { font-family: 'Cinzel', serif; font-size: 13px; color: var(--gold); letter-spacing: 4px; margin: 25px 0 10px 0; font-weight: bold; }
+        .entourage-names { font-family: 'Great Vibes', cursive; color: #fff; font-size: 26px; line-height: 1.3; margin-bottom: 10px; }
+        .entourage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+
+        .locations-wrapper { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 1200px; margin: 40px auto; padding: 0 10px; }
+        .location-box { flex: 1; min-width: 320px; background: rgba(255,255,255,0.04); padding: 30px 20px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        .map-frame { width: 100%; height: 350px; border-radius: 8px; border: none; margin-bottom: 20px; filter: grayscale(0.5) invert(0.9) contrast(1.2); }
+        .btn-directions {
+            display: inline-block; width: 100%; text-decoration: none; color: var(--gold); 
+            font-family: 'Cinzel'; border: 1px solid var(--gold); padding: 15px; 
+            border-radius: 30px; transition: 0.3s; font-size: 11px; letter-spacing: 2px;
+            cursor: pointer;
+        }
+        .btn-directions:hover { background: var(--gold); color: #000; }
+
+        .countdown { display: flex; justify-content: center; gap: 15px; margin: 40px 0; }
+        .count-item { color: var(--gold); font-family: 'Cinzel'; font-size: 11px; }
+        .count-item span { display: block; font-size: 32px; font-weight: bold; color: #fff; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="stars" id="starField"></div>
+
+    <div class="glass-card">
+        <h2 style="font-family:'Cinzel'; font-size:14px; letter-spacing:6px; color:#aaa;">WE ARE GETTING MARRIED</h2>
+        <h1 class="names">Joe & Pau</h1>
+        <p style="font-family:'Cinzel'; color:#fff; font-size:14px; letter-spacing:5px;">MAY 28, 2026</p>
+
+        <div class="countdown" id="timer">
+            <div class="count-item"><span id="days">00</span>DAYS</div>
+            <div class="count-item"><span id="hours">00</span>HRS</div>
+            <div class="count-item"><span id="mins">00</span>MINS</div>
+            <div class="count-item"><span id="secs">00</span>SECS</div>
+        </div>
+    </div>
+
+    <div class="gallery-section">
+        <h3 class="gallery-header">Our Love Story in Motion</h3>
+        <div class="photo-runner">
+            <img src="image/pic1.jpg" alt="1">
+            <img src="image/pic2.jpg" alt="2">
+            <img src="image/pic3.jpg" alt="3">
+            <img src="image/pic1.jpg" alt="1">
+            <img src="image/pic2.jpg" alt="2">
+            <img src="image/pic3.jpg" alt="3">
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <div class="gold-framed-section">
+            <h3 style="font-family:'Great Vibes'; font-size:50px; color:#fff; margin-bottom:30px;">The Bridal Entourage</h3>
+            <div class="entourage-grid">
+                <div>
+                    <p class="role-title">BEST MAN</p>
+                    <p class="entourage-names">Mr. Lance Aren Aparri</p>
+                </div>
+                <div>
+                    <p class="role-title">MAID OF HONOR</p>
+                    <p class="entourage-names">[Pangalan]</p>
+                </div>
+            </div>
+        </div>
+
+        <h3 style="font-family:'Cinzel'; font-size:22px; color:var(--gold); letter-spacing:5px; margin:50px 0 10px 0;">LOCATION & VENUE</h3>
+        
+        <div class="locations-wrapper">
+            <div class="location-box">
+                <h4 style="font-size:16px; color:#fff; font-family:'Cinzel'; margin-bottom: 5px;">THE CEREMONY</h4>
+                <p style="color:#ccc; font-size:14px; margin-bottom: 20px;">Basilica of St. Martin of Tours, Taal</p>
+                <iframe class="map-frame" 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.4721110000!2d120.9856!3d13.9292!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33bd09539343054f%3A0xc304f414e21a421a!2sMunlawin%20Event%20Venue!5e0!3m2!1sen!2sph!4v17105000000000" 
+                    allowfullscreen="" loading="lazy"></iframe>
+                <a href="https://www.google.com/maps/search/?api=1&query=Basilica+of+St.+Martin+of+Tours+Taal+Batangas" 
+                   target="_blank" class="btn-directions">NAVIGATE TO CHURCH</a>
+            </div>
+            
+            <div class="location-box">
+                <h4 style="font-size:16px; color:#fff; font-family:'Cinzel'; margin-bottom: 5px;">THE RECEPTION</h4>
+                <p style="color:#ccc; font-size:14px; margin-bottom: 20px;">Munlawin, San Nicolas, Batangas</p>
+                
+                <iframe class="map-frame" 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.4721110000!2d120.9856!3d13.9292!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33bd09539343054f%3A0xc304f414e21a421a!2sMunlawin%20Event%20Venue!5e0!3m2!1sen!2sph!4v17105000000001" 
+                    allowfullscreen="" loading="lazy"></iframe>
+                
+                <a href="https://maps.app.goo.gl/KMeHNKcKUtFdjCb1A" 
+                   target="_blank" class="btn-directions">NAVIGATE TO RECEPTION</a>
+            </div>
+        </div>
+        
+        <p style="margin-top: 80px; font-family: 'Great Vibes', cursive; font-size: 45px; color: var(--gold);">See you there!</p>
+    </div>
+
+    <script>
+        const target = new Date("May 28, 2026 15:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+            if(diff < 0) return;
+            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById('mins').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            document.getElementById('secs').innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+        }, 1000);
+
+        const starField = document.getElementById('starField');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.cssText = `width: ${Math.random()*2}px; height: ${Math.random()*2}px; left: ${Math.random()*100}%; top: ${Math.random()*100}%; animation-duration: ${Math.random()*3+1}s; animation-delay: ${Math.random()*2}s;`;
+            starField.appendChild(star);
+        }
+    </script>
+</body>
+</html>
